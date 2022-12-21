@@ -1,6 +1,7 @@
 # CalendarWithEvents
 
 The final project of CSC 211.
+
 Check `ProjectRequirements.pdf` for project requirements details.
 
 ## Run the Project
@@ -10,7 +11,7 @@ $ g++ main.cpp -o main
 $ ./main
 ```
 
-```bash
+```
 ============ MENU ============
 	0.View All Events
 	1.Add New Event
@@ -60,7 +61,7 @@ New event added (Event# 202212251000).
 Press Enter key to return to the menu. 
 ```
 
-```bash
+```
 ============ MENU ============
 	0.View All Events
 	1.Add New Event
@@ -88,7 +89,7 @@ Event(s) of Monday, January 1, 1753:
 Press Enter key to return to the menu. 
 ```
 
-```bash
+```
 ============ MENU ============
 	0.View All Events
 	1.Add New Event
@@ -118,7 +119,7 @@ Event(s) of January 1, 1753:
 Press Enter key to return to the menu. 
 ```
 
-```bash
+```
 ============ MENU ============
 	0.View All Events
 	1.Add New Event
@@ -155,7 +156,7 @@ Event Updated.
 Press Enter key to return to the menu. 
 ```
 
-```bash
+```
 ============ MENU ============
 	0.View All Events
 	1.Add New Event
@@ -184,7 +185,7 @@ Event Deleted.
 Press Enter key to return to the menu. 
 ```
 
-```bash
+```
 ============ MENU ============
 	0.View All Events
 	1.Add New Event
@@ -212,7 +213,7 @@ Su Mo Tu We Th Fr Sa
 Press Enter key to return to the menu. 
 ```
 
-```bash
+```
 ============ MENU ============
 	0.View All Events
 	1.Add New Event
@@ -227,4 +228,3 @@ Enter your Choice (0 - 7): 7
 
 Exiting... Thank you!
 ```
-
