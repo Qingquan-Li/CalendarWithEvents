@@ -183,6 +183,7 @@ int main() {
                 cin >> month;
                 cout << "\tYear: ";
                 cin >> year;
+                cout << endl;
                 displayCalendar(month, year);
                 cout << "\nPress Enter key to return to the menu. ";
                 cin.ignore();
@@ -550,10 +551,10 @@ void deleteEvent(long eventNo) {
             remove("Temp.dat");
             break;
         default:
+            remove("Temp.dat");
             break;
     }
     cout << "\nPress Enter key to return to the menu. ";
     cin.ignore();
     cin.get();
 }
-
