@@ -61,6 +61,31 @@ New event added (Event# 202212251000).
 Press Enter key to return to the menu. 
 ```
 
+```bash
+============ MENU ============
+	0.View All Events
+	1.Add New Event
+	2.View Daily Events
+	3.View Monthly Events
+	4.Update Event
+	5.Delete Events
+	6.Display Monthly Calendar
+	7.Exit
+
+Enter your Choice (0 - 7): 1
+
+Adding New Event
+================
+        Month: 2
+        Day: 29
+        Year: 2023
+        Hour: 11
+        Minute: 11
+
+Invalid date/time.
+Press Enter key to return to the menu. 
+```
+
 ```
 ============ MENU ============
 	0.View All Events

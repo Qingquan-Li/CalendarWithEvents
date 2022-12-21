@@ -109,6 +109,7 @@ bool isLeapYear(int);
 string getMonthName(int);
 string getDayOfWeek(int, int, int);
 void displayCalendar(int, int);
+bool isValidDateTime(int, int, int, int, int);
 void addEvent();
 void viewAllEvents();
 void viewDailyEvents(int, int, int);
@@ -290,6 +291,41 @@ void displayCalendar(int month, int year) {
     cout << endl;
 }
 
+/**
+ * A function that tests whether the user input date is valid.
+ */
+bool isValidDateTime(int year, int month, int day, int hour, int minute) {
+    bool isValid = true;
+    if (year < 1753)
+        isValid = false;
+    if (month < 1 || month > 12)
+        isValid = false;
+    if (day < 1)
+        isValid = false;
+
+    if (month == 2) {
+        if (isLeapYear(year)) {
+            if (day > 29)
+                isValid = false;
+        } else {
+            if (day > 28)
+                isValid = false;
+        }
+    } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+        if (day > 30)
+            isValid = false;
+    } else {
+        if (day > 31)
+            isValid = false;
+    }
+
+    if (hour < 0 || hour > 23)
+        isValid = false;
+    if (minute < 0 || minute > 59)
+        isValid = false;
+    return isValid;
+}
+
 // Todo: To validate the user input (month: 1-12, day: 1-31, year: >=1753).
 void addEvent() {
     Event event;
@@ -304,32 +340,39 @@ void addEvent() {
     cout << "================" << endl;
     cout << "\tMonth: ";
     cin >> month;
-    event.setMonth(month);
     cout << "\tDay: ";
     cin >> day;
-    event.setDay(day);
     cout << "\tYear: ";
     cin >> year;
-    event.setYear(year);
     cout << "\tHour: ";
     cin >> hour;
-    event.setHour(hour);
     cout << "\tMinute: ";
     cin >> minute;
-    event.setMinute(minute);
-    event.setEventNo(year, month, day, hour, minute);
-    cout << "\tDetails: ";
-    // Tell the cin object to skip characters (e.g., `\n`) in the keyboard buffer.
-    cin.ignore();
-    cin.getline(details, DETAILS_SIZE);
-    event.setDetails(details);
 
-    ofstream outputFile;
-    outputFile.open("events.dat", ios::binary|ios::app);
-    outputFile.write(reinterpret_cast<char *> (&event), sizeof(event));
-    outputFile.close();
+    if (isValidDateTime(year, month, day, hour, minute)) {
+        event.setMonth(month);
+        event.setDay(day);
+        event.setYear(year);
+        event.setHour(hour);
+        event.setMinute(minute);
+        event.setEventNo(year, month, day, hour, minute);
 
-    cout << "\nNew event added (Event# " << event.getEventNo() << ").";
+        cout << "\tDetails: ";
+        // Tell the cin object to skip characters (e.g., `\n`) in the keyboard buffer.
+        cin.ignore();
+        cin.getline(details, DETAILS_SIZE);
+        event.setDetails(details);
+
+        ofstream outputFile;
+        outputFile.open("events.dat", ios::binary|ios::app);
+        outputFile.write(reinterpret_cast<char *> (&event), sizeof(event));
+        outputFile.close();
+
+        cout << "\nNew event added (Event# " << event.getEventNo() << ").";
+    } else {
+        cout << "\nInvalid date/time.";
+    }
+
     cout << "\nPress Enter key to return to the menu. ";
     cin.ignore();
     cin.get();
@@ -437,6 +480,7 @@ void updateEvent(long eventNo) {
     int minute;
     char details[DETAILS_SIZE]; // event details
     bool found = false;
+    bool isValidDateAndTime = true;
     int filePointPosition;
     fstream file;
     file.open("events.dat", ios::binary|ios::in|ios::out);
@@ -461,42 +505,50 @@ void updateEvent(long eventNo) {
             cout << "\nEnter New Event Details:\n\n";
             cout << "\tMonth: ";
             cin >> month;
-            event.setMonth(month);
             cout << "\tDay: ";
             cin >> day;
-            event.setDay(day);
             cout << "\tYear: ";
             cin >> year;
-            event.setYear(year);
             cout << "\tHour: ";
             cin >> hour;
-            event.setHour(hour);
             cout << "\tMinute: ";
             cin >> minute;
-            event.setMinute(minute);
-            event.setEventNo(year, month, day, hour, minute);
-            cout << "\tDetails: ";
-            // Tell the cin object to skip characters (e.g., `\n`) in the keyboard buffer.
-            cin.ignore();
-            cin.getline(details, DETAILS_SIZE);
-            event.setDetails(details);
 
-            // Move the file pointer.
-            // `(-1) * sizeof(event)` is an `unsigned long` value.
-            filePointPosition = static_cast<int>((-1) * sizeof(event));
-            // `seekp`: go to a location in output file.
-            // `ios::cur` is a flag that can be used with the `seekp()` function to specify the current position
-            // in a stream as the location to which to move the file pointer.
-            file.seekp(filePointPosition, ios::cur);
-            file.write(reinterpret_cast<char *> (&event), sizeof(event));
+            if (isValidDateTime(year, month, day, hour, minute)) {
+                event.setMonth(month);
+                event.setDay(day);
+                event.setYear(year);
+                event.setHour(hour);
+                event.setMinute(minute);
+                event.setEventNo(year, month, day, hour, minute);
+                cout << "\tDetails: ";
+                // Tell the cin object to skip characters (e.g., `\n`) in the keyboard buffer.
+                cin.ignore();
+                cin.getline(details, DETAILS_SIZE);
+                event.setDetails(details);
 
-            found = true;
+                // Move the file pointer.
+                // `(-1) * sizeof(event)` is an `unsigned long` value.
+                filePointPosition = static_cast<int>((-1) * sizeof(event));
+                // `seekp`: go to a location in output file.
+                // `ios::cur` is a flag that can be used with the `seekp()` function to specify the current position
+                // in a stream as the location to which to move the file pointer.
+                file.seekp(filePointPosition, ios::cur);
+                file.write(reinterpret_cast<char *> (&event), sizeof(event));
+
+                found = true;
+            } else {
+                isValidDateAndTime = false;
+                break; // Exit the while loop.
+            }
         }
     }
     file.close();
 
     if (found)
         cout << "\n\nEvent Updated.\nPress Enter key to return to the menu. ";
+    else if (!isValidDateAndTime)
+        cout << "\n\nInvalid date/time.\nPress Enter key to return to the menu. ";
     else
         cout << "\n\nRecord Not Found.\nPress Enter key to return to the menu. ";
     cin.ignore();
